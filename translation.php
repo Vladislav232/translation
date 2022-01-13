@@ -8,13 +8,12 @@ class Translation
 
 
     public $key = "AIza1yCf2zgkmk-nRxdbB4gg49M9GZhmFei55uo";
-// ключ лучше держать в приватной переменной
+// лучше - создать типовой config.php и хранить такие вещи в нем
+// и назвать его другим нестандартным именем 
 
     public function init(){
         parent::init();
-        // Не вижу смысла в "parent::init();" так, как perent это ключевое слово, 
-        //которое используется в дочернем классе для доступа к методу родительского класса
-        //а мы и так в родительском классе.
+        	
 
         if (empty($this->key))
         {
@@ -28,17 +27,20 @@ class Translation
      * @return string
      */
     public static function translate_text($format="text")
-    // Предполагаю, что в translate_text($format="text") нужно просто оставить $format
+	// лучше задать значение по умолчанию так  $format=$debug?" Не указана входная переменная для translate_text":""
+	// и переменной дебаг можно регулировать вывод отладочных сообщений
     {
         if (empty($this->key)){
-            throw new InvalidConfigException("Field <b>$key</b> is required");      
+            throw new InvalidConfigException("Field <b>$key</b> is required");
+            // такая ошибка маловероятно, наличие ключа мы проверили при инициализации, а если объект инициализирован успешно
+            // то и ключ есть, если вызвать метод объекта без инициализации ошибка будет другой, с указанием того что объект не инициализирован			
         }
 
         $values = array(
             'key'     => $this->key,
-            'text'    => $_GET['text'],
-            'lang'    => $_GET['lang'],
-            'format'  => $format == "text" ? 'plain' : $format
+            'text'    => $_GET['text'],// обратить внимание на разницу между гет и пут - в зависимости от настроек сервера, от размера текста выбрать нужный вариант
+            'lang'    => $_GET['lang'],//
+            'format'  => $format == "text" ? 'plain' : $format /// ??? так не проще сразу в параметрах входа было передать plain?? а тут не пришлось бы сравнивать 
         );
         //'format'  => $format == "text" ? 'plain' : $format,
         // Лишняя запятая после формат
@@ -57,9 +59,9 @@ class Translation
         {
             return $data['text'];
         }
-        return $data;
+        return $data;// это сообщение будет понятно только разработчику, нужно его расшифровать или подавить своим типа return "Упс, что-то пошло не так ".$data
 
     }
     
-ооооооооооооооо
+
 }
